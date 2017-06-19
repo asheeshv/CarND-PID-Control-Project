@@ -1,0 +1,33 @@
+The PID project turned out to be a real interesting one and relatively simple as compared to the other projects.
+Setting up the .cpp files in the project were relatively simple, though I had some issues as to how to set 
+the parameters when coming over from Sebastian's lessons.
+
+The whole idea of the PID controller is to minimize the Cross Track Error (CTE) which is the lateral distance between the vehicle 
+and the reference trajectory. This error can be minimized by the use of 3 different coefficients viz. P which is proportional,
+I- Integral and D - differential.
+
+The P value provides the steering angle with the following calculation: steering = -tau * crosstrack_error.
+The D value used in conjunction with P value provides the steering angle with the following calculation
+steering = -tau_p * CTE - tau_d * diff_CTE where differential crosstrack error (diff_CTE) is given by CTE(t) - CTE(t-1)
+
+The I value used in conjunction with P and D value provides the steering angle with the following calculation
+steering = -tau_p * CTE - tau_d * diff_CTE - tau_i * int_CTE where the integrated crosstrack error (int_CTE) is the sum of all the previous crosstrack errors. This term works to cancel out steering drift.
+
+P controller causes the steering angle to be moved proportional to the CTE, however, increasing those values causes it to overshoot the trajectory, 
+and it causes a lot of oscillations which occurs as a result of the vehicle trying to stabilise itself.
+
+D controller is useful that it doesn't allow the vehicle to overshoot the trajectory. This controller is reducing the error so that
+the error becomes smaller, and it counter steers up again so to allow the vehicle to gracefully approach the trajectory.
+
+The I controller is useful that it encounters a systematic bias in the vehicle which accounts for vehicle drift caused by a misalignment of
+the vehicle wheels. The previous two PD controllers aren't robust enough to handle this bias which is where the I controller comes in handy.
+
+I started off with the proportional, integral and differential values of 0.2, 0.004, and 3 which was specified in Sebastian's python lessons.  I resorted to manual tuning of these parameters, where in increasing the value of P controller caused large oscillations.
+So any increase in this value caused the vehicle in the simulator to wobble, so I tuned this value down to 0.18
+
+Increasing D value causes the vehicle to oversteer thereby causing it move left and right a bit. I settled on the value of 2.8, which in
+accordance with 1.8 caused the vehicle to be stable.
+
+I started of the I value with 0.004 however, this was causing the vehicle to over stabilize itself longer than quickly. Any increase in this value would mean longer time to account for vehicle drift. After much trial and error, I found the value of 0.38 for the vehicle to stablize quickly.
+
+After multiple manual iterations, I finally settled of the PID value of (0.18, 0.0038, 2.8)
